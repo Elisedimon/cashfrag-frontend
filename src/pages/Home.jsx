@@ -2,33 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/TopBar'
 import BottomNav from '../components/BottomNav'
 
-const MAIN_TOURNAMENTS = [
-  {
-    id: 'v1-classique',
-    tag: '⚔️ 1V1 CLASSIQUE',
-    title: '1V1\nCLASSIQUE',
-    subtitle: 'Affronte un adversaire en duel direct',
-    price: '1 300',
-    unit: 'FCFA / joueur',
-    gradient: 'linear-gradient(135deg, #1a0a0e, #200a14)',
-    border: 'rgba(232,25,44,0.4)',
-    icon: '🎮',
-    available: true,
-  },
-  {
-    id: '5v5-squad',
-    tag: '🛡️ 5V5 SQUAD',
-    title: '5V5\nSQUAD',
-    subtitle: 'Forme ton équipe et domine le terrain',
-    price: '5 000',
-    unit: 'FCFA / équipe',
-    gradient: 'linear-gradient(135deg, #0a0a1a, #10051a)',
-    border: 'rgba(139,92,246,0.4)',
-    icon: '👥',
-    available: true,
-  },
-]
-
 const MINI_TOURNAMENTS = [
   {
     id: '1v1-sniper',
@@ -38,7 +11,6 @@ const MINI_TOURNAMENTS = [
     desc: 'Précision maximale',
     format: '1 contre 1',
     price: '800 FCFA/joueur',
-    available: true,
   },
   {
     id: '1v1-shotgun',
@@ -48,7 +20,6 @@ const MINI_TOURNAMENTS = [
     desc: 'Combat rapproché',
     format: '1 contre 1',
     price: '800 FCFA/joueur',
-    available: true,
   },
   {
     id: '5v5-rd',
@@ -58,7 +29,6 @@ const MINI_TOURNAMENTS = [
     desc: 'Tactique et coordination',
     format: 'Équipe de 5',
     price: '4 000 FCFA/équipe',
-    available: true,
   },
   {
     id: '5v5-controle',
@@ -68,154 +38,318 @@ const MINI_TOURNAMENTS = [
     desc: 'Dominez les zones',
     format: 'Équipe de 5',
     price: '4 000 FCFA/équipe',
-    available: true,
   },
 ]
 
 const COMING_SOON = [
-  { icon: '👤', name: 'Solo BR', desc: 'Battle Royale Solo' },
-  { icon: '👥', name: 'Duo BR', desc: 'Battle Royale Duo' },
-  { icon: '🪂', name: 'Squad BR', desc: 'Battle Royale Squad' },
+  { icon: '👤', name: 'Solo Battle Royale', desc: 'Bientôt disponible' },
+  { icon: '👥', name: 'Duo Battle Royale', desc: 'Bientôt disponible' },
+  { icon: '🪂', name: 'Squad Battle Royale', desc: 'Bientôt disponible' },
 ]
 
 export default function Home() {
   const navigate = useNavigate()
 
-  const handleTournamentClick = (tournament) => {
-    navigate(`/tournament/${tournament.id}`)
-  }
-
   return (
-    <div style={{ paddingBottom: 80, background: 'var(--bg)', minHeight: '100vh' }}>
+    <div style={{ paddingBottom: 90, background: 'var(--bg)', minHeight: '100vh' }}>
       <TopBar />
 
-      {/* ===== 2 GRANDS BANNERS ===== */}
-      <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24 }}>
-        {MAIN_TOURNAMENTS.map((t) => (
-          <div
-            key={t.id}
-            onClick={() => handleTournamentClick(t)}
-            style={{
-              background: t.gradient,
-              border: `1px solid ${t.border}`,
-              borderRadius: 20,
-              padding: '24px 20px',
-              position: 'relative',
-              overflow: 'hidden',
-              cursor: 'pointer',
-              minHeight: 160,
-            }}
-          >
-            {/* Cercle décoratif */}
-            <div style={{
-              position: 'absolute',
-              top: -40, right: -40,
-              width: 160, height: 160,
-              borderRadius: '50%',
-              background: t.border,
-              opacity: 0.3,
-            }} />
+      {/* ===== BANNER 1 — 1V1 ===== */}
+      <div style={{ padding: '0 16px 14px' }}>
+        <div
+          onClick={() => navigate('/register/v1-classique')}
+          style={{
+            borderRadius: 24,
+            overflow: 'hidden',
+            position: 'relative',
+            cursor: 'pointer',
+            minHeight: 200,
+            background: 'linear-gradient(135deg, #0d0005 0%, #1a0010 40%, #2d0020 100%)',
+            border: '1px solid rgba(232,25,44,0.25)',
+            boxShadow: '0 0 40px rgba(232,25,44,0.15), inset 0 0 60px rgba(232,25,44,0.05)',
+          }}
+        >
+          {/* Grille futuriste */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: `
+              linear-gradient(rgba(232,25,44,0.06) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(232,25,44,0.06) 1px, transparent 1px)
+            `,
+            backgroundSize: '30px 30px',
+          }} />
 
-            {/* Tag */}
+          {/* Cercles lumineux */}
+          <div style={{
+            position: 'absolute',
+            top: -60, right: -60,
+            width: 200, height: 200,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(232,25,44,0.3) 0%, transparent 70%)',
+          }} />
+          <div style={{
+            position: 'absolute',
+            bottom: -40, left: -40,
+            width: 150, height: 150,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(232,25,44,0.15) 0%, transparent 70%)',
+          }} />
+
+          {/* Contenu */}
+          <div style={{ position: 'relative', zIndex: 2, padding: '28px 24px' }}>
+            {/* Badge */}
             <div style={{
-              display: 'inline-block',
-              fontSize: 10, fontWeight: 700,
-              letterSpacing: 2,
-              color: t.id === '5v5-squad' ? 'var(--purple)' : 'var(--red)',
-              textTransform: 'uppercase',
-              marginBottom: 10,
-              background: t.id === '5v5-squad' ? 'rgba(139,92,246,0.15)' : 'rgba(232,25,44,0.15)',
-              padding: '4px 10px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              background: 'rgba(232,25,44,0.2)',
+              border: '1px solid rgba(232,25,44,0.5)',
               borderRadius: 20,
-            }}>{t.tag}</div>
+              padding: '4px 12px',
+              marginBottom: 14,
+            }}>
+              <div style={{
+                width: 6, height: 6,
+                borderRadius: '50%',
+                background: '#e8192c',
+                boxShadow: '0 0 6px #e8192c',
+              }} />
+              <span style={{
+                fontSize: 10, fontWeight: 700,
+                letterSpacing: 2, color: '#ff4455',
+                textTransform: 'uppercase',
+              }}>DUEL INTENSE</span>
+            </div>
 
             {/* Titre */}
             <div style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 36, fontWeight: 700,
-              color: 'var(--text)',
-              lineHeight: 1,
-              marginBottom: 8,
-              whiteSpace: 'pre-line',
-            }}>{t.title}</div>
-
-            {/* Sous-titre */}
-            <div style={{
-              fontSize: 12, color: 'var(--text3)',
-              marginBottom: 16,
-            }}>{t.subtitle}</div>
-
-            {/* Prix */}
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-              <div style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 28, fontWeight: 700,
-                color: 'var(--gold)',
-              }}>{t.price}</div>
-              <div style={{ fontSize: 12, color: 'var(--text3)' }}>{t.unit}</div>
+              fontSize: 42, fontWeight: 700,
+              lineHeight: 0.95,
+              marginBottom: 10,
+              letterSpacing: -1,
+            }}>
+              <span style={{
+                color: '#fff',
+                textShadow: '0 0 30px rgba(255,255,255,0.3)',
+              }}>1V1 </span>
+              <span style={{
+                color: '#e8192c',
+                textShadow: '0 0 20px rgba(232,25,44,0.8)',
+              }}>CLASH</span>
             </div>
 
-            {/* Bouton */}
-            <button style={{
-              marginTop: 16,
-              background: t.id === '5v5-squad' ? 'var(--purple)' : 'var(--red)',
-              color: '#fff',
-              fontFamily: 'var(--font-display)',
-              fontSize: 13, fontWeight: 700,
-              letterSpacing: 1.5,
-              padding: '10px 22px',
-              borderRadius: 8,
-              textTransform: 'uppercase',
-              border: 'none',
-              cursor: 'pointer',
-            }}>S'INSCRIRE →</button>
-
-            {/* Icône décorative */}
             <div style={{
-              position: 'absolute',
-              right: 20, bottom: 20,
-              fontSize: 52,
-              opacity: 0.08,
-            }}>{t.icon}</div>
+              fontSize: 12, color: 'rgba(255,255,255,0.5)',
+              marginBottom: 20, letterSpacing: 1,
+            }}>
+              AFFRONTE TON ADVERSAIRE · PROUVE TON SKILL
+            </div>
+
+            {/* Prix + Bouton */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 2 }}>
+                  MISE PAR JOUEUR
+                </div>
+                <div style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 26, fontWeight: 700,
+                  color: '#f5a623',
+                  textShadow: '0 0 15px rgba(245,166,35,0.6)',
+                }}>1 300 <span style={{ fontSize: 14 }}>FCFA</span></div>
+              </div>
+
+              <button style={{
+                background: 'linear-gradient(135deg, #e8192c, #ff4455)',
+                border: 'none',
+                borderRadius: 12,
+                padding: '12px 22px',
+                color: '#fff',
+                fontFamily: 'var(--font-display)',
+                fontSize: 14, fontWeight: 700,
+                letterSpacing: 1.5,
+                cursor: 'pointer',
+                boxShadow: '0 4px 20px rgba(232,25,44,0.5)',
+                textTransform: 'uppercase',
+              }}>JOUER →</button>
+            </div>
           </div>
-        ))}
+        </div>
       </div>
 
-      {/* ===== MINI TOURNOIS ===== */}
+      {/* ===== BANNER 2 — 5V5 ===== */}
+      <div style={{ padding: '0 16px 24px' }}>
+        <div
+          onClick={() => navigate('/register/5v5-squad')}
+          style={{
+            borderRadius: 24,
+            overflow: 'hidden',
+            position: 'relative',
+            cursor: 'pointer',
+            minHeight: 200,
+            background: 'linear-gradient(135deg, #04001a 0%, #0d0530 40%, #150a40 100%)',
+            border: '1px solid rgba(139,92,246,0.25)',
+            boxShadow: '0 0 40px rgba(139,92,246,0.15), inset 0 0 60px rgba(139,92,246,0.05)',
+          }}
+        >
+          {/* Grille futuriste */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: `
+              linear-gradient(rgba(139,92,246,0.07) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(139,92,246,0.07) 1px, transparent 1px)
+            `,
+            backgroundSize: '30px 30px',
+          }} />
+
+          {/* Cercles lumineux */}
+          <div style={{
+            position: 'absolute',
+            top: -60, right: -60,
+            width: 220, height: 220,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%)',
+          }} />
+          <div style={{
+            position: 'absolute',
+            bottom: -50, left: -50,
+            width: 180, height: 180,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(99,52,206,0.2) 0%, transparent 70%)',
+          }} />
+
+          {/* Contenu */}
+          <div style={{ position: 'relative', zIndex: 2, padding: '28px 24px' }}>
+            {/* Badge */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              background: 'rgba(139,92,246,0.2)',
+              border: '1px solid rgba(139,92,246,0.5)',
+              borderRadius: 20,
+              padding: '4px 12px',
+              marginBottom: 14,
+            }}>
+              <div style={{
+                width: 6, height: 6,
+                borderRadius: '50%',
+                background: '#8b5cf6',
+                boxShadow: '0 0 6px #8b5cf6',
+              }} />
+              <span style={{
+                fontSize: 10, fontWeight: 700,
+                letterSpacing: 2, color: '#a78bfa',
+                textTransform: 'uppercase',
+              }}>GUERRE D'ÉQUIPE</span>
+            </div>
+
+            {/* Titre */}
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 42, fontWeight: 700,
+              lineHeight: 0.95,
+              marginBottom: 10,
+              letterSpacing: -1,
+            }}>
+              <span style={{
+                color: '#fff',
+                textShadow: '0 0 30px rgba(255,255,255,0.3)',
+              }}>5V5 </span>
+              <span style={{
+                color: '#8b5cf6',
+                textShadow: '0 0 20px rgba(139,92,246,0.8)',
+              }}>SQUAD</span>
+            </div>
+
+            <div style={{
+              fontSize: 12, color: 'rgba(255,255,255,0.5)',
+              marginBottom: 20, letterSpacing: 1,
+            }}>
+              FORME TON ÉQUIPE · DOMINE LE TERRAIN
+            </div>
+
+            {/* Prix + Bouton */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 2 }}>
+                  MISE PAR ÉQUIPE
+                </div>
+                <div style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 26, fontWeight: 700,
+                  color: '#f5a623',
+                  textShadow: '0 0 15px rgba(245,166,35,0.6)',
+                }}>5 000 <span style={{ fontSize: 14 }}>FCFA</span></div>
+              </div>
+
+              <button style={{
+                background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)',
+                border: 'none',
+                borderRadius: 12,
+                padding: '12px 22px',
+                color: '#fff',
+                fontFamily: 'var(--font-display)',
+                fontSize: 14, fontWeight: 700,
+                letterSpacing: 1.5,
+                cursor: 'pointer',
+                boxShadow: '0 4px 20px rgba(139,92,246,0.5)',
+                textTransform: 'uppercase',
+              }}>JOUER →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ===== AUTRES TOURNOIS ===== */}
       <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '0 16px',
-        marginBottom: 12,
+        display: 'flex', justifyContent: 'space-between',
+        alignItems: 'center', padding: '0 16px', marginBottom: 12,
       }}>
         <div style={{
           fontFamily: 'var(--font-display)',
-          fontSize: 15, fontWeight: 700,
-          letterSpacing: 2,
-          textTransform: 'uppercase',
-          color: 'var(--text)',
-        }}>AUTRES TOURNOIS</div>
+          fontSize: 13, fontWeight: 700,
+          letterSpacing: 3, textTransform: 'uppercase',
+          color: 'var(--text2)',
+        }}>AUTRES MODES</div>
+        <div style={{
+          width: 40, height: 1,
+          background: 'linear-gradient(90deg, var(--red), transparent)',
+        }} />
       </div>
 
       <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
         {MINI_TOURNAMENTS.map((t) => (
           <div
             key={t.id}
-            onClick={() => handleTournamentClick(t)}
+            onClick={() => navigate(`/register/${t.id}`)}
             style={{
-              background: 'var(--card)',
+              background: 'linear-gradient(135deg, var(--card), var(--bg3))',
               border: '1px solid var(--border)',
-              borderRadius: 14,
+              borderRadius: 16,
               padding: '14px 16px',
               display: 'flex',
               alignItems: 'center',
               gap: 14,
               cursor: 'pointer',
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
+            {/* Ligne colorée à gauche */}
             <div style={{
-              width: 48, height: 48,
+              position: 'absolute',
+              left: 0, top: 0, bottom: 0,
+              width: 3,
+              background: t.iconBg.includes('232') ? 'var(--red)' :
+                          t.iconBg.includes('245') ? 'var(--gold)' :
+                          t.iconBg.includes('139') ? 'var(--purple)' : 'var(--green)',
+              borderRadius: '3px 0 0 3px',
+            }} />
+
+            <div style={{
+              width: 46, height: 46,
               borderRadius: 12,
               background: t.iconBg,
               display: 'flex', alignItems: 'center',
@@ -227,7 +361,7 @@ export default function Home() {
               <div style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: 14, fontWeight: 700,
-                color: 'var(--text)', marginBottom: 2,
+                color: 'var(--text)', marginBottom: 3,
               }}>{t.name}</div>
               <div style={{ fontSize: 11, color: 'var(--text3)' }}>
                 {t.format} · {t.desc}
@@ -238,14 +372,14 @@ export default function Home() {
               <div style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: 13, fontWeight: 700,
-                color: 'var(--gold)',
+                color: 'var(--gold)', marginBottom: 4,
               }}>{t.price}</div>
               <div style={{
-                fontSize: 10,
+                fontSize: 9, fontWeight: 700,
                 color: 'var(--green)',
-                fontWeight: 600,
-                marginTop: 2,
-              }}>DISPONIBLE</div>
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+              }}>● LIVE</div>
             </div>
           </div>
         ))}
@@ -253,54 +387,44 @@ export default function Home() {
 
       {/* ===== BIENTÔT DISPONIBLE ===== */}
       <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '24px 16px 12px',
+        display: 'flex', justifyContent: 'space-between',
+        alignItems: 'center', padding: '24px 16px 12px',
       }}>
         <div style={{
           fontFamily: 'var(--font-display)',
-          fontSize: 15, fontWeight: 700,
-          letterSpacing: 2,
-          textTransform: 'uppercase',
-          color: 'var(--text)',
-        }}>BIENTÔT DISPONIBLE</div>
+          fontSize: 13, fontWeight: 700,
+          letterSpacing: 3, textTransform: 'uppercase',
+          color: 'var(--text2)',
+        }}>BIENTÔT</div>
         <div style={{
-          fontSize: 10,
-          background: 'rgba(245,166,35,0.15)',
+          fontSize: 9, fontWeight: 700,
+          background: 'rgba(245,166,35,0.1)',
+          border: '1px solid rgba(245,166,35,0.2)',
           color: 'var(--gold)',
-          padding: '3px 10px',
-          borderRadius: 20,
-          fontWeight: 600,
-          letterSpacing: 1,
+          padding: '3px 10px', borderRadius: 20,
+          letterSpacing: 2, textTransform: 'uppercase',
         }}>🔒 PROCHAINEMENT</div>
       </div>
 
-      <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {COMING_SOON.map((t, i) => (
-          <div
-            key={i}
-            style={{
-              background: 'var(--card)',
-              border: '1px solid var(--border)',
-              borderRadius: 14,
-              padding: '14px 16px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 14,
-              opacity: 0.5,
-              cursor: 'not-allowed',
-            }}
-          >
+          <div key={i} style={{
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
+            borderRadius: 14,
+            padding: '14px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 14,
+            opacity: 0.45,
+          }}>
             <div style={{
-              width: 48, height: 48,
+              width: 46, height: 46,
               borderRadius: 12,
-              background: 'rgba(255,255,255,0.05)',
+              background: 'rgba(255,255,255,0.04)',
               display: 'flex', alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 22, flexShrink: 0,
+              justifyContent: 'center', fontSize: 20,
             }}>{t.icon}</div>
-
             <div style={{ flex: 1 }}>
               <div style={{
                 fontFamily: 'var(--font-display)',
@@ -309,22 +433,18 @@ export default function Home() {
               }}>{t.name}</div>
               <div style={{ fontSize: 11, color: 'var(--text3)' }}>{t.desc}</div>
             </div>
-
             <div style={{
-              fontSize: 10,
-              background: 'rgba(255,255,255,0.06)',
+              fontSize: 9,
+              background: 'rgba(255,255,255,0.05)',
               color: 'var(--text3)',
-              padding: '4px 10px',
-              borderRadius: 20,
-              fontWeight: 600,
-              letterSpacing: 1,
-              flexShrink: 0,
-            }}>🔒 BIENTÔT</div>
+              padding: '4px 10px', borderRadius: 20,
+              fontWeight: 700, letterSpacing: 1,
+            }}>🔒</div>
           </div>
         ))}
       </div>
 
-      <div style={{ height: 24 }} />
+      <div style={{ height: 16 }} />
       <BottomNav />
     </div>
   )
