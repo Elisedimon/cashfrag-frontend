@@ -2,8 +2,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 
 const tabs = [
   { path: '/home', icon: '🔥', label: 'Accueil' },
-  { path: '/tournaments', icon: '🏆', label: 'Tournois' },
-  { path: '/leaderboard', icon: '📊', label: 'Classement' },
+  { path: '/leaderboard', icon: '🏆', label: 'Classement' },
+  { path: '/chat', icon: '💬', label: 'Chat' },
   { path: '/profile', icon: '👤', label: 'Profil' },
 ]
 
@@ -28,29 +28,16 @@ export default function BottomNav() {
       {tabs.map(tab => {
         const active = location.pathname === tab.path
         return (
-          <div
-            key={tab.path}
-            onClick={() => navigate(tab.path)}
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '4px',
-              cursor: 'pointer',
-              padding: '4px 0',
-            }}
-          >
+          <div key={tab.path} onClick={() => navigate(tab.path)} style={{
+            flex: 1, display: 'flex', flexDirection: 'column',
+            alignItems: 'center', gap: '4px', cursor: 'pointer', padding: '4px 0',
+          }}>
             <span style={{ fontSize: '20px' }}>{tab.icon}</span>
             <span style={{
-              fontSize: '10px',
-              fontWeight: 500,
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
+              fontSize: '9px', fontWeight: 600,
+              textTransform: 'uppercase', letterSpacing: '1px',
               color: active ? 'var(--red)' : 'var(--text3)',
-            }}>
-              {tab.label}
-            </span>
+            }}>{tab.label}</span>
           </div>
         )
       })}

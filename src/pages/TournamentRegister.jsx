@@ -107,7 +107,6 @@ export default function TournamentRegister() {
 
   const [selectedPayment, setSelectedPayment] = useState(0)
   const [form, setForm] = useState({ pseudo: '', codm: '', phone: '' })
-  const [showSuccess, setShowSuccess] = useState(false)
 
   if (!tournament) {
     return (
@@ -123,52 +122,11 @@ export default function TournamentRegister() {
     )
   }
 
-  const isTeam = tournament.format === 'Équipe de 5'
-
-  if (showSuccess) {
-    return (
-      <div style={{
-        minHeight: '100vh', background: 'var(--bg)',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        gap: 16, padding: 24,
-      }}>
-        <div style={{ fontSize: 72 }}>🎉</div>
-        <div style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 32, fontWeight: 700,
-          color: 'var(--text)', textAlign: 'center',
-        }}>INSCRIPTION ENVOYÉE !</div>
-        <div style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 18, color: tournament.color, textAlign: 'center',
-        }}>{tournament.name}</div>
-        <div style={{
-          background: 'var(--card)', border: '1px solid var(--border)',
-          borderRadius: 14, padding: '16px 20px',
-          fontSize: 13, color: 'var(--text2)',
-          textAlign: 'center', lineHeight: 1.8, maxWidth: 320,
-        }}>
-          ✅ Ton inscription a été reçue<br />
-          📱 Un admin va te contacter sous peu<br />
-          💰 Prépare ton paiement de{' '}
-          <span style={{ color: 'var(--gold)', fontWeight: 700 }}>
-            {tournament.priceLabel}
-          </span>
-        </div>
-        <button
-          onClick={() => navigate('/home')}
-          style={{
-            marginTop: 8, background: 'var(--red)', color: '#fff',
-            fontFamily: 'var(--font-display)',
-            fontSize: 14, fontWeight: 700, letterSpacing: 1.5,
-            padding: '12px 28px', borderRadius: 10,
-            textTransform: 'uppercase', border: 'none', cursor: 'pointer',
-          }}
-        >RETOUR À L'ACCUEIL</button>
-      </div>
-    )
+  const handleConfirm = () => {
+    navigate(`/success/${id}`)
   }
+
+  const isTeam = tournament.format === 'Équipe de 5'
 
   return (
     <div style={{ paddingBottom: 100 }}>
@@ -328,7 +286,7 @@ export default function TournamentRegister() {
         </div>
 
         <button
-          onClick={() => setShowSuccess(true)}
+          onClick={handleConfirm}
           disabled={!form.pseudo || !form.phone}
           style={{
             width: '100%',
