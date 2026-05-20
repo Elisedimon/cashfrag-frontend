@@ -24,7 +24,7 @@ export default function Home() {
 
       {/* BANNER 1v1 */}
       <div style={{ padding: '0 16px 12px' }}>
-        <div onClick={() => navigate('/register/v1-classique')} style={{
+        <div onClick={() => navigate('/tournament/v1-classique')} style={{
           borderRadius: 22, overflow: 'hidden', position: 'relative',
           minHeight: 190, cursor: 'pointer', marginBottom: 12,
           background: 'linear-gradient(135deg, #0d0005, #1e0010, #2a0018)',
@@ -55,7 +55,7 @@ export default function Home() {
         </div>
 
         {/* BANNER 5v5 */}
-        <div onClick={() => navigate('/register/5v5-squad')} style={{
+        <div onClick={() => navigate('/tournament/5v5-squad')} style={{
           borderRadius: 22, overflow: 'hidden', position: 'relative',
           minHeight: 190, cursor: 'pointer',
           background: 'linear-gradient(135deg, #03001a, #0a0530, #120840)',
@@ -94,7 +94,7 @@ export default function Home() {
 
       <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 9 }}>
         {MINI.map(t => (
-          <div key={t.id} onClick={() => navigate(`/register/${t.id}`)} style={{
+          <div key={t.id} onClick={() => navigate(`/tournament/${t.id}`)} style={{
             background: 'linear-gradient(135deg, var(--card), var(--bg3))',
             border: '1px solid var(--border)', borderRadius: 14,
             padding: '13px 14px', display: 'flex', alignItems: 'center',
