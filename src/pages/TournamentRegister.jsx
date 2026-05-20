@@ -1,7 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 import TopBar from '../components/TopBar'
 import BottomNav from '../components/BottomNav'
+import DepositModal from '../components/DepositModal'
 
 const TOURNAMENTS_DATA = {
   'v1-classique': {
@@ -94,19 +96,17 @@ const TOURNAMENTS_DATA = {
   },
 }
 
-const PAYMENT_METHODS = [
-  { id: 'wave', icon: '🌊', label: 'Wave', bg: 'rgba(0,120,255,0.12)' },
-  { id: 'orange', icon: '🍊', label: 'Orange Money', bg: 'rgba(255,120,0,0.12)' },
-  { id: 'mtn', icon: '📱', label: 'MTN Mobile Money', bg: 'rgba(255,200,0,0.12)' },
-]
-
 export default function TournamentRegister() {
   const { id } = useParams()
   const navigate = useNavigate()
   const tournament = TOURNAMENTS_DATA[id]
 
-  const [selectedPayment, setSelectedPayment] = useState(0)
+  // Consommation du solde et des fonctions globales du profil
+  const { balance, deductMoney, depositMoney } = useAuth()
+
   const [form, setForm] = useState({ pseudo: '', codm: '', phone: '' })
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false)
+  const [error, setError] = useState('')
 
   if (!tournament) {
     return (
@@ -123,18 +123,34 @@ export default function TournamentRegister() {
   }
 
   const handleConfirm = () => {
-    navigate(`/success/${id}`)
+    setError('')
+
+    // 1. Vérification si le solde profil est supérieur ou égal au prix du tournoi
+    if (balance < tournament.price) {
+      setError('Solde insuffisant dans votre portefeuille profil !')
+      return
+    }
+
+    // 2. Déduction du solde en direct
+    const paymentSuccess = deductMoney(tournament.price)
+    
+    if (paymentSuccess) {
+      navigate(`/success/${id}`)
+    } else {
+      setError('Une erreur est survenue lors du paiement.')
+    }
   }
 
   const isTeam = tournament.format === 'Équipe de 5'
+  const hasEnoughFunds = balance >= tournament.price
 
   return (
-    <div style={{ paddingBottom: 100 }}>
+    <div style={{ paddingBottom: 100, background: 'var(--bg)', minHeight: '100vh' }}>
       <TopBar showBack title="Inscription" />
 
       {/* Header tournoi */}
       <div style={{
-        margin: '0 16px 20px',
+        margin: '16px 16px 20px',
         background: 'var(--card)',
         border: `1px solid ${tournament.color}33`,
         borderRadius: 16, padding: '18px 20px',
@@ -160,6 +176,30 @@ export default function TournamentRegister() {
             fontSize: 16, fontWeight: 700, color: 'var(--gold)',
           }}>{tournament.priceLabel}</div>
         </div>
+      </div>
+
+      {/* Affichage du solde actuel du portefeuille joueur */}
+      <div style={{
+        margin: '0 16px 20px', padding: '14px 16px', background: 'var(--card)',
+        borderRadius: 14, border: '1px solid var(--border)', display: 'flex', 
+        justifyContent: 'space-between', alignItems: 'center'
+      }}>
+        <div>
+          <div style={{ fontSize: 11, color: 'var(--text3)', letterSpacing: 1 }}>VOTRE SOLDE PROFIL</div>
+          <div style={{ fontSize: 18, fontWeight: 700, color: hasEnoughFunds ? 'var(--green)' : 'var(--red)', marginTop: 2 }}>
+            {balance.toLocaleString()} FCFA
+          </div>
+        </div>
+        <button 
+          onClick={() => setIsDepositModalOpen(true)}
+          style={{ 
+            background: 'var(--green)', border: 'none', borderRadius: 8, 
+            padding: '8px 14px', color: '#fff', fontSize: 11, 
+            fontFamily: 'var(--font-display)', fontWeight: 700, cursor: 'pointer' 
+          }}
+        >
+          + RECHARGER
+        </button>
       </div>
 
       {/* Règles */}
@@ -216,47 +256,9 @@ export default function TournamentRegister() {
                 width: '100%', background: 'var(--card)',
                 border: '1px solid var(--border2)', borderRadius: 10,
                 padding: '13px 16px', color: 'var(--text)',
-                fontSize: 14, fontFamily: 'var(--font-body)',
+                fontSize: 14, fontFamily: 'var(--font-body)', boxSizing: 'border-box'
               }}
             />
-          </div>
-        ))}
-      </div>
-
-      {/* Moyen de paiement */}
-      <div style={{ padding: '0 16px', marginBottom: 20 }}>
-        <div style={{
-          fontSize: 12, fontWeight: 700, letterSpacing: 2,
-          color: 'var(--text3)', textTransform: 'uppercase', marginBottom: 14,
-        }}>MOYEN DE PAIEMENT</div>
-
-        {PAYMENT_METHODS.map((m, i) => (
-          <div
-            key={i}
-            onClick={() => setSelectedPayment(i)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 14,
-              background: 'var(--card)',
-              border: `1px solid ${selectedPayment === i ? tournament.color : 'var(--border)'}`,
-              borderRadius: 12, padding: '13px 16px',
-              cursor: 'pointer', marginBottom: 10,
-            }}
-          >
-            <div style={{
-              width: 40, height: 40, borderRadius: 10,
-              background: m.bg, display: 'flex',
-              alignItems: 'center', justifyContent: 'center', fontSize: 18,
-            }}>{m.icon}</div>
-            <div style={{ flex: 1, fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>
-              {m.label}
-            </div>
-            <div style={{
-              width: 20, height: 20, borderRadius: '50%',
-              background: selectedPayment === i ? tournament.color : 'transparent',
-              border: `2px solid ${selectedPayment === i ? tournament.color : 'var(--border2)'}`,
-              display: 'flex', alignItems: 'center',
-              justifyContent: 'center', fontSize: 11, color: '#fff',
-            }}>{selectedPayment === i ? '✓' : ''}</div>
           </div>
         ))}
       </div>
@@ -278,19 +280,25 @@ export default function TournamentRegister() {
             display: 'flex', justifyContent: 'space-between',
             fontSize: 15, fontWeight: 700, color: 'var(--text)',
           }}>
-            <span>Total à payer</span>
+            <span>Frais d'inscription</span>
             <span style={{ fontFamily: 'var(--font-display)', color: 'var(--gold)' }}>
               {tournament.price.toLocaleString()} FCFA
             </span>
           </div>
         </div>
 
+        {error && (
+          <div style={{ color: 'var(--red)', fontSize: 13, textAlign: 'center', marginBottom: 12, fontWeight: 600 }}>
+            ⚠️ {error}
+          </div>
+        )}
+
         <button
           onClick={handleConfirm}
           disabled={!form.pseudo || !form.phone}
           style={{
             width: '100%',
-            background: !form.pseudo || !form.phone ? 'var(--text3)' : tournament.color,
+            background: !form.pseudo || !form.phone ? 'var(--text3)' : (hasEnoughFunds ? tournament.color : 'var(--red)'),
             color: '#fff',
             fontFamily: 'var(--font-display)',
             fontSize: 16, fontWeight: 700, letterSpacing: 2,
@@ -298,15 +306,26 @@ export default function TournamentRegister() {
             textTransform: 'uppercase', border: 'none',
             cursor: !form.pseudo || !form.phone ? 'not-allowed' : 'pointer',
           }}
-        >CONFIRMER L'INSCRIPTION</button>
+        >
+          {hasEnoughFunds ? "CONFIRMER AVEC MON SOLDE" : "SOLDE INSUFFISANT"}
+        </button>
 
         <div style={{
           textAlign: 'center', fontSize: 12,
           color: 'var(--text3)', marginTop: 12,
         }}>
-          Un admin vous contactera sur WhatsApp pour confirmer
+          Le montant sera directement prélevé de votre compte profil.
         </div>
       </div>
+
+      {/* Fenêtre modale de rechargement */}
+      <DepositModal 
+        isOpen={isDepositModalOpen} 
+        onClose={() => setIsDepositModalOpen(false)} 
+        onDepositSuccess={(amount) => depositMoney(amount)} 
+      />
+
+      <BottomNav />
     </div>
   )
 }
